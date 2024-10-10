@@ -1,7 +1,19 @@
+import React, { useEffect } from 'react';
 import './style.css'
 import kotekDeszcz from './assets/kotek-deszcz.png'
 import SearchBar from './components/SearchBar'
 import CurrentWeather from './components/CurrentWeather'
+
+useEffect(() => {
+  const orientation = (screen as any).orientation;
+  if (orientation && orientation.lock) {
+    orientation.lock('portrait').catch((error: any) => {
+      console.error('Orientation lock failed:', error);
+    });
+  } else {
+    console.warn('Screen orientation API is not supported in this browser.');
+  }
+}, []);
 
 function App() {
   return (
@@ -16,7 +28,7 @@ function App() {
               <SearchBar />
             </div>
             <div className="mt-4" />
-            <div className="w-full h-[25%] sm:h-auto">
+            <div className="w-full h-[25%] sm:h-auto items-center">
               <CurrentWeather />
             </div>
           </div>
