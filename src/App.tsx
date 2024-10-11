@@ -4,21 +4,15 @@ import SearchBar from './components/SearchBar'
 import CurrentWeather from './components/CurrentWeather'
 import Forecast from './components/Forecast'
 import { useState } from 'react'
-import { fetchWeatherData } from './services/weatherApi'
+import { useWeatherQuery } from './services/useWeatherQuery'
 
 function App() {
-  const [weatherData, setWeatherData] = useState(null)
-  const [error, setError] = useState<string | null>(null)
+  const [location, setLocation] = useState('');
+  const { data: weatherData, error} = useWeatherQuery(location);
 
-  const handleSearch = async (location: string) => {
-    try {
-      const data = await fetchWeatherData(location)
-      setWeatherData(data)
-      setError(null); 
-    } catch (error) {
-      setError('Błąd podczas pobierania danych pogodowych')
-    }
-  }
+  const handleSearch = (newLocation: string) => {
+    setLocation(newLocation);
+  };
 
   return (
     <div className="app-wrapper min-h-screen flex items-center justify-center">
@@ -29,9 +23,9 @@ function App() {
         <div className="weather-content w-full sm:w-[60%] flex flex-col items-center">
           <div className="w-full flex flex-col items-center mt-4">
             <SearchBar onSearch={handleSearch} />
-            {error && <div className="text-red-500">{error}</div>}
-            {weatherData && <CurrentWeather weatherData={weatherData} />}
-            <Forecast />
+            {error && <div className="text-red-500">{error.toString()}</div>}
+            {weatherData && <CurrentWeather location={location} />}
+            {weatherData && <Forecast  />}
           </div>
         </div>
       </div>

@@ -1,16 +1,24 @@
 import React from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { TiWeatherSunny } from "react-icons/ti";
 import { WiHumidity } from "react-icons/wi";
 import { FaThermometerHalf, FaWind } from "react-icons/fa";
+import { fetchWeatherData } from '../services/weatherApi';
 
 interface CurrentWeatherProps {
-  weatherData: any;
+  location: string;
 }
 
-const CurrentWeather: React.FC<CurrentWeatherProps> = ({ weatherData }) => {
-  if (!weatherData) {
-    return null; 
-  }
+const CurrentWeather: React.FC<CurrentWeatherProps> = ({ location }) => {
+  const { data: weatherData, isLoading, error } = useQuery({
+    queryKey: ['weather', location],
+    queryFn: () => fetchWeatherData(location),
+    enabled: !!location
+  });
+
+  if (isLoading) return <div>Ładowanie...</div>;
+  if (error) return <div>Wystąpił błąd: {(error as Error).message}</div>;
+  if (!weatherData) return null;
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -36,6 +44,4 @@ const CurrentWeather: React.FC<CurrentWeatherProps> = ({ weatherData }) => {
     </div>
   );
 };
-
 export default CurrentWeather;
-

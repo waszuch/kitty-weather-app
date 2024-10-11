@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
 import { Input } from "@/components/ui/input";
 import { BiSearch, BiCurrentLocation } from 'react-icons/bi';
+import { fetchWeatherData } from '../services/weatherApi';
 
 interface SearchBarProps {
   onSearch: (location: string) => void;
@@ -9,8 +11,14 @@ interface SearchBarProps {
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const [inputValue, setInputValue] = useState('');
 
+  const mutation = useMutation({
+    mutationFn: fetchWeatherData,
+    onSuccess: () => {
+      onSearch(inputValue);
+    },  });
+
   const handleSearchClick = () => {
-    onSearch(inputValue);
+    mutation.mutate(inputValue);
   };
 
   return (
@@ -25,8 +33,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
         size={60}
         className="ml-2 px-2 py-2 cursor-pointer transition ease-out hover:scale-125"
       />
+      {mutation.isPending && <div>Wyszukiwanie...</div>}
+      {mutation.isError && <div>Błąd: {mutation.error instanceof Error ? mutation.error.message : 'Unknown error'}</div>}
     </div>
   );
-};
-
-export default SearchBar;
+};export default SearchBar;
