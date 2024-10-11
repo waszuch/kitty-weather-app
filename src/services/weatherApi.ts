@@ -7,3 +7,5 @@ export const fetchWeatherData = async (location: string) => {
   const data = await response.json();
   return data;
 };
+
+

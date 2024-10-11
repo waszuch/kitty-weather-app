@@ -33,8 +33,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
         size={60}
         className="ml-2 px-2 py-2 cursor-pointer transition ease-out hover:scale-125"
       />
-      {mutation.isPending && <div>Wyszukiwanie...</div>}
-      {mutation.isError && <div>Błąd: {mutation.error instanceof Error ? mutation.error.message : 'Unknown error'}</div>}
+    
     </div>
   );
 };export default SearchBar;
