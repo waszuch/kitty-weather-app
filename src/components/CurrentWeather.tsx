@@ -1,8 +1,7 @@
 import React from 'react';
-import { useQuery } from '@tanstack/react-query';
 import { WiDaySunny, WiNightClear, WiCloudy, WiSnow, WiThunderstorm, WiDust , WiHumidity, WiDayRain, WiNightRain} from "react-icons/wi";
 import { FaThermometerHalf, FaWind } from "react-icons/fa";
-import { fetchWeatherData } from '../services/weatherApi';
+import { useWeatherQuery } from '../services/useWeatherQuery';
 
 interface CurrentWeatherProps {
   location: string;
@@ -29,12 +28,10 @@ const getWeatherIcon = (condition: string, dt: number, sunrise: number, sunset: 
     default:
       return isDay ? <WiDaySunny size={50} /> : <WiNightClear size={50} />;
   }
-};const CurrentWeather: React.FC<CurrentWeatherProps> = ({ location }) => {
-  const { data: weatherData, isLoading, error } = useQuery({
-    queryKey: ['weather', location],
-    queryFn: () => fetchWeatherData(location),
-    enabled: !!location
-  });
+};
+
+const CurrentWeather: React.FC<CurrentWeatherProps> = ({ location }) => {
+  const { data: weatherData, isLoading, error } = useWeatherQuery(location);
 
   if (isLoading) return <div>Ładowanie...</div>;
   if (error) return <div>Wystąpił błąd: {(error as Error).message}</div>;
@@ -69,5 +66,5 @@ const getWeatherIcon = (condition: string, dt: number, sunrise: number, sunset: 
     </div>
   );
 }
-export default CurrentWeather
 
+export default CurrentWeather;

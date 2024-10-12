@@ -5,6 +5,16 @@ interface ForecastProps {
   location: string;
 }
 
+interface ForecastDay {
+  dt: number;
+  main: {
+    temp: number;
+  };
+  weather: Array<{
+    icon: string;
+  }>;
+}
+
 const Forecast: React.FC<ForecastProps> = ({ location }) => {
   const { data: forecastData, isLoading, error } = useForecastQuery(location);
 
@@ -12,7 +22,9 @@ const Forecast: React.FC<ForecastProps> = ({ location }) => {
   if (error) return <div>Błąd: {(error as Error).message}</div>;
   if (!forecastData || !forecastData.list) return null;
 
-  const dailyForecast = forecastData.list.filter((_: any, index: number) => index % 8 === 0).slice(0, 5);
+  const dailyForecast = forecastData.list
+  .filter((item: any) => item.dt_txt.includes('12:00:00'))
+  .slice(0, 5);
 
   return (
     <div>
@@ -21,8 +33,8 @@ const Forecast: React.FC<ForecastProps> = ({ location }) => {
       </div>
       <hr className="my-1" />
       <div className="flex justify-between gap-4">
-        {dailyForecast.map((day: any, index: number) => (
-          <div key={index} className="flex flex-col items-center mx-4">
+        {dailyForecast.map((day: ForecastDay) => (
+          <div key={day.dt} className="flex flex-col items-center mx-4">
             <p className="font-medium">{new Date(day.dt * 1000).toLocaleDateString('pl-PL', { weekday: 'short' })}</p>
             <img 
               src={`https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`} 
@@ -35,5 +47,4 @@ const Forecast: React.FC<ForecastProps> = ({ location }) => {
     </div>
   );
 };
-
 export default Forecast;

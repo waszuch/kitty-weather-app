@@ -9,7 +9,7 @@ import { useWeatherQuery } from './services/useWeatherQuery'
 
 function App() {
   const [location, setLocation] = useState('');
-  const { data: weatherData, error} = useWeatherQuery(location);
+  const { data:  error, isError } = useWeatherQuery(location);
 
   const handleSearch = (newLocation: string) => {
     setLocation(newLocation);
@@ -24,14 +24,13 @@ function App() {
         <div className="weather-content w-full sm:w-[60%] flex flex-col items-center">
           <div className="w-full flex flex-col items-center mt-4">
             <SearchBar onSearch={handleSearch} />
-            {error && <div className="text-red-500">{error.toString()}</div>}
-            {weatherData && <CurrentWeather location={location} />}
-            {weatherData && <Forecast location={location} />}
+            {isError && <div className="text-red-500">{error instanceof Error ? error.message : 'Wystąpił błąd'}</div>}
+           <CurrentWeather location={location} />
+            <Forecast location={location} />
           </div>
         </div>
       </div>
     </div>
   )
-}
 
-export default App
+}export default App
