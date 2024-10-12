@@ -6,6 +6,7 @@ import Forecast from './components/Forecast'
 import { useState } from 'react'
 import { useWeatherQuery } from './services/useWeatherQuery'
 
+
 function App() {
   const [location, setLocation] = useState('');
   const { data: weatherData, error} = useWeatherQuery(location);
@@ -25,7 +26,7 @@ function App() {
             <SearchBar onSearch={handleSearch} />
             {error && <div className="text-red-500">{error.toString()}</div>}
             {weatherData && <CurrentWeather location={location} />}
-            {weatherData && <Forecast  />}
+            {weatherData && <Forecast location={location} />}
           </div>
         </div>
       </div>

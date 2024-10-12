@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { WiDaySunny, WiNightClear, WiCloudy, WiRain, WiSnow, WiThunderstorm, WiDust , WiHumidity} from "react-icons/wi";
+import { WiDaySunny, WiNightClear, WiCloudy, WiSnow, WiThunderstorm, WiDust , WiHumidity, WiDayRain, WiNightRain} from "react-icons/wi";
 import { FaThermometerHalf, FaWind } from "react-icons/fa";
 import { fetchWeatherData } from '../services/weatherApi';
 
@@ -15,9 +15,9 @@ const getWeatherIcon = (condition: string, dt: number, sunrise: number, sunset: 
     case 'clear':
       return isDay ? <WiDaySunny size={50} /> : <WiNightClear size={50} />;
     case 'clouds':
-      return <WiCloudy size={50} />;
+      return <WiCloudy size={50} /> 
     case 'rain':
-      return <WiRain size={50} />;
+      return isDay ? <WiDayRain size={50} /> : <WiNightRain size={50} />;
     case 'snow':
       return <WiSnow size={50} />;
     case 'thunderstorm':
@@ -29,8 +29,7 @@ const getWeatherIcon = (condition: string, dt: number, sunrise: number, sunset: 
     default:
       return isDay ? <WiDaySunny size={50} /> : <WiNightClear size={50} />;
   }
-};
-const CurrentWeather: React.FC<CurrentWeatherProps> = ({ location }) => {
+};const CurrentWeather: React.FC<CurrentWeatherProps> = ({ location }) => {
   const { data: weatherData, isLoading, error } = useQuery({
     queryKey: ['weather', location],
     queryFn: () => fetchWeatherData(location),
@@ -51,7 +50,7 @@ const CurrentWeather: React.FC<CurrentWeatherProps> = ({ location }) => {
           weatherData.sys.sunrise,
           weatherData.sys.sunset
         )}
-        <h1 className="mt-2">{weatherData.main.temp}°C</h1>
+        <h1 className="mt-2">{Math.round(weatherData.main.temp)}°C</h1>
       </div>
       <div className="mt-10 flex w-full justify-between">
         <div className="flex flex-col items-center">
@@ -64,10 +63,11 @@ const CurrentWeather: React.FC<CurrentWeatherProps> = ({ location }) => {
         </div>
         <div className="flex flex-col items-center">
           <FaWind size={50} />
-          <h1>{weatherData.wind.speed} km/h</h1>
+          <h1>{Math.round(weatherData.wind.speed)} km/h</h1>
         </div>
       </div>
     </div>
   );
 }
 export default CurrentWeather
+
