@@ -1,30 +1,21 @@
 import React from 'react';
 import { useForecastQuery } from '../services/useWeatherQuery';
+import { ForecastDay } from '../services/weatherApi';
 
 interface ForecastProps {
   location: string;
-}
-
-interface ForecastDay {
-  dt: number;
-  main: {
-    temp: number;
-  };
-  weather: Array<{
-    icon: string;
-  }>;
 }
 
 const Forecast: React.FC<ForecastProps> = ({ location }) => {
   const { data: forecastData, isLoading, error } = useForecastQuery(location);
 
   if (isLoading) return <div>Ładowanie...</div>;
-  if (error) return <div>Błąd: {(error as Error).message}</div>;
+  if (error) return <div>Błąd: {error.message}</div>;
   if (!forecastData || !forecastData.list) return null;
 
   const dailyForecast = forecastData.list
-  .filter((item: any) => item.dt_txt.includes('12:00:00'))
-  .slice(0, 5);
+    .filter((item: ForecastDay) => item.dt_txt.includes('12:00:00'))
+    .slice(0, 5);
 
   return (
     <div>
@@ -47,4 +38,5 @@ const Forecast: React.FC<ForecastProps> = ({ location }) => {
     </div>
   );
 };
+
 export default Forecast;
