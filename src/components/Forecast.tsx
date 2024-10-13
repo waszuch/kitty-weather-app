@@ -26,7 +26,7 @@ const Forecast: React.FC<ForecastProps> = ({ location }) => {
       <div className="flex justify-between gap-4">
         {dailyForecast.map((day: ForecastDay) => (
           <div key={day.dt} className="flex flex-col items-center mx-4">
-            <p className="font-medium">{new Date(day.dt * 1000).toLocaleDateString('pl-PL', { weekday: 'short' })}</p>
+            <p className="font-medium">{new Date(day.dt * 1000).toLocaleDateString('en-US', { weekday: 'short' })}</p>
             <img 
               src={`https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`} 
               alt="ikona pogody" 
