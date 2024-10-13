@@ -10,7 +10,7 @@ import { useCatImage } from './services/catImage';
 
 function App() {
   const [location, setLocation] = useState('');
-  const { data, error, isError } = useWeatherQuery(location);
+  const { data: error, isError } = useWeatherQuery(location);
   const catImage = useCatImage(location);
 
   const handleSearch = (newLocation: string) => {
