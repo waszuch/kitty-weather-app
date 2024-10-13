@@ -9,7 +9,7 @@ export const useCatImage = (location: string) => {
   const { data: weatherData } = useWeatherQuery(location);
 
   if (!weatherData || !weatherData.weather || !weatherData.weather[0]) {
-    return kotekDeszcz; 
+    return kotekSlonce; 
   }
 
   const weatherCondition = weatherData.weather[0].main.toLowerCase();
@@ -20,16 +20,13 @@ export const useCatImage = (location: string) => {
     case 'clouds':
       return kotekChmury;
     case 'rain':
+    case 'thunderstorm':
       return kotekDeszcz;
     case 'snow':
       return kotekSnieg;
     case 'mist':
       return kotekMgła;
-    case 'thunderstorm':
-        return kotekDeszcz
-    case 'snow':
-        return kotekSnieg
     default:
-      return kotekDeszcz; 
+      return kotekSlonce; 
   }
 };
