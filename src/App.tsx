@@ -3,13 +3,11 @@ import SearchBar from './components/SearchBar'
 import CurrentWeather from './components/CurrentWeather'
 import Forecast from './components/Forecast'
 import { useState } from 'react'
-import { useWeatherQuery } from './services/useWeatherQuery'
 import skyBackground from './assets/blue-sky-background-and-white-clouds-vector.jpg';
 import { useCatImage } from './services/catImage';
 
 function App() {
   const [location, setLocation] = useState('');
-  const { data: error, isError } = useWeatherQuery(location);
   const catImage = useCatImage(location);
 
   const handleSearch = (newLocation: string) => {
@@ -25,7 +23,6 @@ function App() {
         <div className="weather-content w-full sm:w-[60%] flex flex-col items-center p-2 sm:p-4 overflow-y-auto max-h-[90vh] sm:max-h-none">
           <div className="w-full flex flex-col items-center">
             <SearchBar onSearch={handleSearch} />
-            {isError && <div className="text-red-500">{error instanceof Error ? error.message : 'Wystąpił błąd'}</div>}
             <CurrentWeather location={location} />
             <div className="w-full overflow-x-auto">
               <Forecast location={location} />
